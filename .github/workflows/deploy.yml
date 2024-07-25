@@ -16,6 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       output1: ${{ steps.build-image.outputs.test }}
+      output2: ${{ steps.build-image.outputs.image }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -53,7 +54,7 @@ jobs:
     steps:
       - env:
           OUTPUT1: ${{needs.build.outputs.output1}}
-        run: echo "$OUTPUT1"
+        run: echo "$OUTPUT1 $OUTPUT2"
   
       - name: Checkout
         uses: actions/checkout@v4

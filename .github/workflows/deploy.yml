@@ -1,6 +1,6 @@
 name: Deploy to Amazon ECS v1
 
-on: workflow_dispatch
+on: push
 
 env:
   AWS_REGION: us-east-1                   
@@ -78,7 +78,7 @@ jobs:
         with:
           task-definition: ${{ env.ECS_TASK_DEFINITION }}
           container-name: ${{ env.CONTAINER_NAME }}
-          image: ${{ needs.build.outputs.imageuri }}
+          image: ${{ needs.build.outputs.output1 }}
 
       - name: Deploy Amazon ECS task definition
         uses: aws-actions/amazon-ecs-deploy-task-definition@df9643053eda01f169e64a0e60233aacca83799a

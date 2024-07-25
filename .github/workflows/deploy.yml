@@ -14,8 +14,6 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
-    outputs:
-      image: ${{ steps.build-image.outputs.image }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -42,7 +40,7 @@ jobs:
           # be deployed to ECS.
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_ENV
           echo $GITHUB_OUTPUT
 
   deploy:
@@ -67,7 +65,6 @@ jobs:
           aws ecs describe-task-definition --task-definition $TASK_DEFINITION --query "taskDefinition" --output json > task-definition.json  
           pwd
           ls
-          echo "Image: ${{ needs.build.outputs.image }}"
 
       - name: Fill in the new image ID in the Amazon ECS task definition
         id: task-def
@@ -75,7 +72,7 @@ jobs:
         with:
           task-definition: ${{ env.ECS_TASK_DEFINITION }}
           container-name: ${{ env.CONTAINER_NAME }}
-          image: ${{ needs.build.outputs.image }}
+          image: ${{ env.image }}
 
       - name: Deploy Amazon ECS task definition
         uses: aws-actions/amazon-ecs-deploy-task-definition@df9643053eda01f169e64a0e60233aacca83799a

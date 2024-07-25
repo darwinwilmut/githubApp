@@ -45,6 +45,16 @@ jobs:
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
+      - name: Build
+        run: |
+          TASK_DEFINITION=$(aws ecs describe-services \
+            --cluster ${{ env.ECS_CLUSTER }} \
+            --services ${{ env.ECS_SERVICE }} \
+            --query "services[0].taskDefinition" \
+            --output text)
+          pwd
+          ls
+
       # - name: Fill in the new image ID in the Amazon ECS task definition
       #   id: task-def
       #   uses: aws-actions/amazon-ecs-render-task-definition@c804dfbdd57f713b6c079302a4c01db7017a36fc

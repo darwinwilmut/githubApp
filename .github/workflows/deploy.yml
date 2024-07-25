@@ -44,6 +44,7 @@ jobs:
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
           echo "test=hello" >> "$GITHUB_OUTPUT"
+          echo "GITHUB_OUTPUT is at $GITHUB_OUTPUT"
 
   deploy:
     name: Deploy

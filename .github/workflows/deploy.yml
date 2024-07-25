@@ -15,7 +15,7 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     outputs:
-      output1: ${{ steps.build-image.outputs.image }}
+      output1: ${{ steps.build-image.outputs.test }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -43,7 +43,7 @@ jobs:
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
-          echo $image >> "$GITHUB_OUTPUT"
+          echo "test=hello" >> "$GITHUB_OUTPUT"
 
   deploy:
     name: Deploy
@@ -78,7 +78,7 @@ jobs:
         with:
           task-definition: ${{ env.ECS_TASK_DEFINITION }}
           container-name: ${{ env.CONTAINER_NAME }}
-          image: ${{ needs.build.outputs.output1 }}
+          image: ${{ steps.build-image.outputs.image }}
 
       - name: Deploy Amazon ECS task definition
         uses: aws-actions/amazon-ecs-deploy-task-definition@df9643053eda01f169e64a0e60233aacca83799a

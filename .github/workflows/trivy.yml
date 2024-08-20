@@ -1,6 +1,10 @@
 name: TrivyScan
 
-on: workflow_dispatch
+on: push
+
+permissions:
+  contents: read
+  security-events: write
 
 jobs:
   deploy:

@@ -3,6 +3,8 @@ name: TrivyScan
 on: 
   push:
   workflow_dispatch:
+  schedule:
+    - cron: '* * * * *'
 
 permissions:
   contents: read
